@@ -1,0 +1,61 @@
+name: 'Setup environment'
+author: vladislavkovaliov
+description: 'Common setup steps for Continues Integration workflows'
+
+inputs:
+  get-node-version-action:
+    description: 'Path to get-node-version action (default: ./.github/actions/get-node-version)'
+    required: false
+    default: './.github/actions/get-node-version'
+  package-json-path:
+    description: 'Path to package.json (default: ./package.json)'
+    required: false
+    default: './package.json'
+  package-manager:
+    description: 'Package manager to use (npm, pnpm, yarn)'
+    required: false
+    default: 'npm'
+
+outputs:
+  package-version:
+    description: 'Package version from package.json'
+    value: ${{ steps.package-version.outputs.version }}
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: Validate package.json exists
+      shell: bash
+      run: |
+        if [ ! -f "${{ inputs.package-json-path }}" ]; then
+          echo "Error: package.json not found at ${{ inputs.package-json-path }}"
+          exit 1
+        fi
+
+    - name: Get Node.js version
+      id: node-version
+      uses: ${{ inputs.get-node-version-action }}
+      with:
+        path: ${{ inputs.package-json-path }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ steps.node-version.outputs.version }}
+        cache: ${{ inputs.package-manager }}
+
+    - name: Install deps
+      shell: bash
+      run: |
+        case "${{ inputs.package-manager }}" in
+          npm) npm ci ;;
+          pnpm) pnpm install --frozen-lockfile ;;
+          yarn) yarn install --frozen-lockfile ;;
+          *) echo "Error: Unknown package manager: ${{ inputs.package-manager }}"; exit 1 ;;
+        esac
+
+    - name: Read version from package.json
+      id: package-version
+      shell: bash
+      run: echo "version=$(node -p "require('${{ inputs.package-json-path }}').version")" >> $GITHUB_OUTPUT
