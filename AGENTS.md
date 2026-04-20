@@ -25,7 +25,6 @@ Reads Node.js version from `package.json.engines.node`.
 Sets up Node.js, installs deps, outputs package version.
 
 **Inputs:**
-- `get-node-version-action` - Path to get-node-version action
 - `package-json-path` - Path to package.json
 - `package-manager` - npm, pnpm, or yarn
 
