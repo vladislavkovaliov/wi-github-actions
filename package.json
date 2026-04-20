@@ -2,11 +2,34 @@
   "name": "wi-github-actions",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "prettier": "prettier --check \".github/**/*.yml\"",
+    "prettier:fix": "prettier --write \".github/**/*.yml\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Shared GitHub Actions for reuse across repositories",
+  "config": {
+    "commitizen": {
+      "path": "./cz-adapter"
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.12",
+    "@inquirer/prompts": "^7.6.0",
+    "commitizen": "^4.3.1",
+    "husky": "^9.1.7",
+    "inquirer": "^13.4.1",
+    "prettier": "^3.5.3"
+  },
+  "engines": {
+    "node": "24",
+    "npm": "11"
+  }
 }

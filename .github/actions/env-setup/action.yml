@@ -1,28 +1,28 @@
-name: 'Setup environment'
+name: "Setup environment"
 author: vladislavkovaliov
-description: 'Common setup steps for Continues Integration workflows'
+description: "Common setup steps for Continues Integration workflows"
 
 inputs:
   get-node-version-action:
-    description: 'Path to get-node-version action (default: ./.github/actions/get-node-version)'
+    description: "Path to get-node-version action (default: ./.github/actions/get-node-version)"
     required: false
-    default: './.github/actions/get-node-version'
+    default: "./.github/actions/get-node-version"
   package-json-path:
-    description: 'Path to package.json (default: ./package.json)'
+    description: "Path to package.json (default: ./package.json)"
     required: false
-    default: './package.json'
+    default: "./package.json"
   package-manager:
-    description: 'Package manager to use (npm, pnpm, yarn)'
+    description: "Package manager to use (npm, pnpm, yarn)"
     required: false
-    default: 'npm'
+    default: "npm"
 
 outputs:
   package-version:
-    description: 'Package version from package.json'
+    description: "Package version from package.json"
     value: ${{ steps.package-version.outputs.version }}
 
 runs:
-  using: 'composite'
+  using: "composite"
 
   steps:
     - name: Validate package.json exists
