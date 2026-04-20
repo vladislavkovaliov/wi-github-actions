@@ -2,7 +2,7 @@
   "name": "wi-github-actions",
   "version": "1.0.0",
   "main": "index.js",
-  "private": true,
+  "private": false,
   "scripts": {
     "lint": "biome check .",
     "lint:fix": "biome check --write .",

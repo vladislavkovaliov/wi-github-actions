@@ -5,15 +5,16 @@ on:
 
 jobs:
   setup-rc:
-    if: github.ref_type == 'branch'
+    if: github.ref_type == "branch"
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-          - name: RC branch detected
+      - name: RC branch detected
         run: |
           echo "New RC branch: ${{ github.ref }}"
+
       - name: Checkout
         uses: actions/checkout@v6
         with:
