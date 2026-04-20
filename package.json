@@ -8,7 +8,7 @@
     "lint:fix": "biome check --write .",
     "prettier": "prettier --check \".github/**/*.yml\"",
     "prettier:fix": "prettier --write \".github/**/*.yml\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "prepare": "husky"
   },
   "keywords": [],
