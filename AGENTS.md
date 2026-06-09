@@ -39,6 +39,24 @@ Sets up Node.js, installs deps, outputs package version.
     package-manager: pnpm
 ```
 
+### run-tests
+Runs unit tests with Jest or Vitest.
+
+**Inputs:**
+- `runner` - Test runner (`jest` or `vitest`, default: `jest`)
+- `coverage` - Enable coverage (`true`/`false`, default: `false`)
+- `args` - Additional CLI flags (default: `""`)
+- `workdir` - Working directory (default: `.`)
+
+**Usage from external repo:**
+```yaml
+- uses: vladislavkovaliov/wi-github-actions/.github/actions/run-tests@main
+  with:
+    runner: vitest
+    coverage: true
+    workdir: ./packages/frontend
+```
+
 ## Commands
 - `npm run prettier` - Check YAML formatting
 - `npm run prettier:fix` - Fix YAML formatting

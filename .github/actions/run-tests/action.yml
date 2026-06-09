@@ -1,0 +1,60 @@
+name: "Run unit tests"
+author: vladislavkovaliov
+description: "Run unit tests with Jest or Vitest"
+
+inputs:
+  runner:
+    description: "Test runner to use (jest or vitest)"
+    required: false
+    default: "jest"
+  coverage:
+    description: "Enable test coverage"
+    required: false
+    default: "false"
+  args:
+    description: "Additional CLI arguments for the test runner"
+    required: false
+    default: ""
+  workdir:
+    description: "Working directory relative to repository root"
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Validate runner
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: |
+        case "${{ inputs.runner }}" in
+          jest|vitest) ;;
+          *) echo "Error: Unsupported runner '${{ inputs.runner }}'. Use 'jest' or 'vitest'."; exit 1 ;;
+        esac
+
+    - name: Build test command
+      id: test-command
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: |
+        cmd="npx ${{ inputs.runner }}"
+
+        if [ "${{ inputs.runner }}" = "vitest" ]; then
+          cmd="$cmd run"
+        fi
+
+        if [ -n "${{ inputs.args }}" ]; then
+          cmd="$cmd ${{ inputs.args }}"
+        fi
+
+        if [ "${{ inputs.coverage }}" = "true" ]; then
+          cmd="$cmd --coverage"
+        fi
+
+        echo "command=$cmd" >> $GITHUB_OUTPUT
+
+    - name: Run tests
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: ${{ steps.test-command.outputs.command }}
