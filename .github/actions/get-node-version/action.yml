@@ -20,8 +20,13 @@ runs:
       id: node-version
       shell: bash
       run: |
-        if [ ! -f "${{ inputs.path }}" ]; then
-          echo "Error: package.json not found at ${{ inputs.path }}"
+        p="${{ inputs.path }}"
+        case "$p" in
+          /*) ;;
+          *) p="$GITHUB_WORKSPACE/$p" ;;
+        esac
+        if [ ! -f "$p" ]; then
+          echo "Error: package.json not found at $p"
           exit 1
         fi
-        echo "version=$(node -p "require('${{ inputs.path }}').engines.node")" >> $GITHUB_OUTPUT
+        echo "version=$(node -p "require('$p').engines.node")" >> $GITHUB_OUTPUT

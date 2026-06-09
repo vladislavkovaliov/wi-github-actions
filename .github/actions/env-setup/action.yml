@@ -24,14 +24,21 @@ runs:
     - name: Validate package.json exists
       shell: bash
       run: |
-        if [ ! -f "${{ inputs.package-json-path }}" ]; then
-          echo "Error: package.json not found at ${{ inputs.package-json-path }}"
+        p="${{ inputs.package-json-path }}"
+        case "$p" in
+          /*) ;;
+          *) p="$GITHUB_WORKSPACE/$p" ;;
+        esac
+        if [ ! -f "$p" ]; then
+          echo "Error: package.json not found at $p"
           exit 1
         fi
 
     - name: Get Node.js version
       id: node-version
       uses: vladislavkovaliov/wi-github-actions/.github/actions/get-node-version@main
+      with:
+        path: ${{ inputs.package-json-path }}
 
     - name: Set up Node.js
       uses: actions/setup-node@v6
@@ -52,4 +59,10 @@ runs:
     - name: Read version from package.json
       id: package-version
       shell: bash
-      run: echo "version=$(node -p "require('${{ inputs.package-json-path }}').version")" >> $GITHUB_OUTPUT
+      run: |
+        p="${{ inputs.package-json-path }}"
+        case "$p" in
+          /*) ;;
+          *) p="$GITHUB_WORKSPACE/$p" ;;
+        esac
+        echo "version=$(node -p "require('$p').version")" >> $GITHUB_OUTPUT
