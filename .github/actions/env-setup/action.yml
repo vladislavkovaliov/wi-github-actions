@@ -40,6 +40,15 @@ runs:
       with:
         path: ${{ inputs.package-json-path }}
 
+    - name: Install package manager
+      shell: bash
+      run: |
+        case "${{ inputs.package-manager }}" in
+          pnpm) npm install -g pnpm ;;
+          yarn) npm install -g yarn ;;
+          npm) echo "npm is included with Node.js" ;;
+        esac
+
     - name: Set up Node.js
       uses: actions/setup-node@v6
       with:
