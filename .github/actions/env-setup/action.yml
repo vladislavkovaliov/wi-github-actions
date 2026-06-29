@@ -44,7 +44,7 @@ runs:
       shell: bash
       run: |
         case "${{ inputs.package-manager }}" in
-          pnpm) npm install -g pnpm ;;
+          pnpm) corepack enable && corepack prepare pnpm@9 --activate ;;
           yarn) npm install -g yarn ;;
           npm) echo "npm is included with Node.js" ;;
         esac
